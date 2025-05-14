@@ -1,0 +1,36 @@
+services:
+  # app:
+  #   build: .
+  #   volumes:
+  #     - ./data:/app/data
+  #     - ./embeddings:/app/embeddings
+  #   depends_on:
+  #     - db
+  #   env_file:
+  #     - .env
+
+  db:
+    image: postgres:14
+    restart: always
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: research
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+
+  # ui:
+  #   build:
+  #     context: .
+  #   command: streamlit run app/ui.py --server.port=8501
+  #   ports:
+  #     - "8501:8501"
+  #   volumes:
+  #     - ./embeddings:/app/embeddings
+  #     - ./data:/app/data
+  #   depends_on:
+  #     - db
+  #   env_file:
+  #     - .env

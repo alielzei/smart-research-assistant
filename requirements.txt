@@ -1,0 +1,12 @@
+langchain
+openai
+faiss-cpu
+psycopg2-binary
+sqlalchemy
+python-dotenv
+PyMuPDF
+tqdm
+sentence-transformers
+streamlit  # optional UI
+langchain-community
+numpy<2
