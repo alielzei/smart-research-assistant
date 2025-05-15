@@ -67,17 +67,22 @@ def ingest_pdf(pdf_path):
     chunks = chunk_text(text)
     embeddings = model.encode(chunks)
 
-    doc_id = str(uuid.uuid4())
     filename = os.path.basename(pdf_path)
     title = meta.get("title", filename)
     author = meta.get("author", "Unknown")
 
+    # Generate a unique id for each chunk
+    chunk_ids = [str(uuid.uuid4()) for _ in chunks]
+
     # Add to FAISS
     index.add(embeddings)
-    doc_ids.extend([doc_id] * len(embeddings))
+    doc_ids.extend(chunk_ids)
 
     # Add metadata to Postgres
-    rows = [(doc_id, title, author, filename, chunk) for chunk in chunks]
+    rows = [(chunk_id, title, author, filename, chunk) for chunk_id, chunk in zip(chunk_ids, chunks)]
+
+    print(list(t[0] for t in rows[:5]))  # Print first 5 rows for debugging
+
     execute_values(cur, """
         INSERT INTO documents (id, title, author, filename, chunk)
         VALUES %s
