@@ -59,8 +59,16 @@ def get_metadata_by_title(title: str) -> str:
 llm = ChatOpenAI(temperature=0, model="gpt-3.5-turbo")
 
 tools = [
-    Tool.from_function(semantic_search),
-    Tool.from_function(get_metadata_by_title),
+    Tool.from_function(
+        semantic_search,
+        name="semantic_search",
+        description="Searches document chunks using semantic similarity and returns relevant snippets."
+    ),
+    Tool.from_function(
+        get_metadata_by_title,
+        name="get_metadata_by_title",
+        description="Retrieves document metadata (title, author, filename) from Postgres by title."
+    ),
 ]
 
 agent = initialize_agent(
